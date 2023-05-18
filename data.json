@@ -225,4 +225,12 @@ db.salesman_master.insertOne({
 
 
 
+db.salwsman_master.findOne({"name":"ashish"})
+db.salwsman_master.findOne({},{"_id":0,"name":1,"remarks":1})
+db.salwsman_master.find({},{"_id":0,"name":1,"remarks":1})
+db.salwsman_master.find().skip(3)
+db.salwsman_master.find().limit(5)
+db.salwsman_master.find().count()
+db.salwsman_master.find().sort({"name": 1})		//	assinding
+db.salwsman_master.find().sort({"name": -1})		// desanding
 
