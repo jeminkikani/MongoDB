@@ -1,0 +1,228 @@
+db.client_master.insertOne({
+		"clientno":"c00001",
+		"name" : "ivan bayross", 
+		"city":"mumbai",
+		"pincode":400054,
+		"state":"maharashtra",
+		"baldue":15000
+});
+
+db.client_master.insertOne({
+		"clientno":"C00002", 
+		"name" : "mamta majmudar", 
+		"city":"madrash",
+		"pincode":780001,
+		"state":"tamilnadu",
+		"baldue":0
+});
+
+db.client_master.insertOne({
+	"clientno":"C00003", 
+	"name" : "chhaya bankar", 
+	"city":"mumbai",
+	"pincode":400057,
+	"state":"maharastra",
+	"baldue":5000
+});
+
+db.client_master.insertOne({
+	"clientno":"C00004", 
+	"name" : "asvini joshi", 
+	"city":"bangalore",
+	"pincode":560001,
+	"state":"karnataka",
+	"baldue":0
+});
+
+db.client_master.insertOne({
+	"clientno":"C00005", 
+	"name" : "hansal colaco", 
+	"city":"mumbai",
+	"pincode":400060,
+	"state":"maharastra",
+	"baldue":2000
+});
+
+db.client_master.insertOne({
+	"clientno":"C00006", 
+	"name" : "dipak sharma", 
+	"city":"mangalor",
+	"pincode":560050,
+	"state":"karnataka",
+	"baldue":0
+});
+
+
+db.client_master.findOne({"name":"mamta majmudar"})
+db.client_master.findOne({},{"_id":0,"name":1,"baldue":1})
+db.client_master.find({},{"_id":0,"name":1,"baldue":1})
+db.client_master.find().skip(3)
+db.client_master.find().limit(5)
+db.client_master.find().count()
+db.client_master.find().sort({"name": 1})		//	assinding
+db.client_master.find().sort({"name": -1})		// desanding
+
+// product master
+		
+db.Product_Master.insertOne({
+	"ProductNo":"P00001",
+	"Description":"T-Shirts",
+	"Profit Percent":5,
+	"Unit Measure":"Piece",
+	"Qty On Hand":200,
+	"Reorder Lvl":50,
+	"Sell Price":350,
+	"Cost Price":250})
+
+db.Product_Master.insertOne({
+	"ProductNo":"P0345",
+	"Description":"Shirts",
+	"Profit Percent":6,
+	"Unit Measure":"Piece",
+	"Qty On Hand":150,
+	"Reorder Lvl":50,
+	"Sell Price":500,
+	"Cost Price":350});
+
+db.Product_Master.insertOne({
+	"ProductNo":"P06734",
+	"Description":"Cotton Jeans",
+	"Profit Percent":5,
+	"Unit Measure":"Piece",
+	"Qty On Hand":100,
+	"Reorder Lvl":20,
+	"Sell Price":600,
+	"Cost Price":450});
+
+db.Product_Master.insertOne({
+	"ProductNo":"P07865",
+	"Description":"Jeans",
+	"Profit Percent":5,
+	"Unit Measure":"Piece",
+	"Qty On Hand":100,
+	"Reorder Lvl":20,
+	"Sell Price":750,
+	"Cost Price":500});
+
+db.Product_Master.insertOne({
+	"ProductNo":"P07868",
+	"Description":"Trousers",
+	"Profit Percent":2,
+	"Unit Measure":"Piece",
+	"Qty On Hand":150,
+	"Reorder Lvl":50,
+	"Sell Price":850,
+	"Cost Price":550});
+
+db.Product_Master.insertOne({
+	"ProductNo":"P07885",
+	"Description":"Pull Overs",
+	"Profit Percent":2.5,
+	"Unit Measure":"Piece",
+	"Qty On Hand":80,
+	"Reorder Lvl":30,
+	"Sell Price":700,
+	"Cost Price":450});
+
+
+db.Product_Master.insertOne({
+	"ProductNo":"P07965",
+	"Description":"Denim Shirts",
+	"Profit Percent":4,
+	"Unit Measure":"Piece",
+	"Qty On Hand":100,
+	"Reorder Lvl":40,
+	"Sell Price":350,
+	"Cost Price":250});
+
+db.Product_Master.insertOne({
+	"ProductNo":"P07975",
+	"Description":"Lycra Tops",
+	"Profit Percent":5,
+	"Unit Measure":"Piece",
+	"Qty On Hand":70,
+	"Reorder Lvl":30,
+	"Sell Price":300,
+	"Cost Price":175});
+
+db.Product_Master.insertOne({
+	"ProductNo":"P08865",
+	"Description":"Skirts",
+	"Profit Percent":5,
+	"Unit Measure":"Piece",
+	"Qty On Hand":75,
+	"Reorder Lvl":30,
+	"Sell Price":450,
+	"Cost Price":300});
+
+
+db.Product_Master.findOne({"Description":"Lycra Tops"})		// fineone data 
+db.Product_Master.find().skip(3)
+db.Product_Master.find().limit(5)
+db.Product_Master.find().count()
+db.Product_Master.find().sort({"name": 1})		//	assinding
+db.Product_Master.find().sort({"name": -1})		// desanding
+
+
+// salesman master
+
+db.salesman_master.insertOne({
+	"salesman_no":"s00001",
+	"name":"aman",
+	"address1":"a-14",
+	"address2":"worli",
+	"city":"mumbai",
+	"pincode":400002,
+	"state":"maharastra",
+	"salamt":3000,
+	"tgttoget":100,
+	"ytdsales":50,
+	"remarks":"good"	
+});
+
+db.salesman_master.insertOne({
+	"salesman_no":"s00002",
+	"name":"omkar",
+	"address1":"65",
+	"address2":"nariman",
+	"city":"mumbai",
+	"pincode":400001,
+	"state":"maharastra",
+	"salamt":3000,
+	"tgttoget":200,
+	"ytdsales":100,
+	"remarks":"good"	
+});
+
+
+db.salesman_master.insertOne({
+	"salesman_no":"s00003",
+	"name":"raj",
+	"address1":"p-7",
+	"address2":"bandra",
+	"city":"mumbai",
+	"pincode":400032,
+	"state":"maharastra",
+	"salamt":3000,
+	"tgttoget":200,
+	"ytdsales":100,
+	"remarks":"good"	
+});
+
+db.salesman_master.insertOne({
+	"salesman_no":"s00004",
+	"name":"ashish",
+	"address1":"A/5",
+	"address2":"juhu",
+	"city":"mumbai",
+	"pincode":400044,
+	"state":"maharastra",
+	"salamt":3500,
+	"tgttoget":200,
+	"ytdsales":150,
+	"remarks":"good"	
+});
+
+
+
+

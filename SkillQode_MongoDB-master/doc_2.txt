@@ -1,0 +1,343 @@
+Q1. Select all students where marks are less than 99 and greater than 50?
+
+c1: {marks: {$lt: 99}}
+c2: {marks: {$gt: 50}}
+
+db.student.find({$and:[{marks:{$lt:99}},{marks:{$gt:50}}]})
+
+
+db.student.find({$and:[{marks:{$lt:99}},{marks:{$gt:50}}]})
+
+> db.students.find({$and: [{marks: {$lt: 85}}, {marks: {$gt: 45}}]}).pretty()
+
+Q2. Select all students where marks are less than 50 and greater than
+or equal to 35?
+c1: {marks: {$lt: 50}}
+c2: {marks: {$gte: 35}}
+> db.students.find({$and: [{marks: {$lt: 50}}, {marks: {$gte:35}}]}).pretty()
+
+Shortcut for AND operation:
+--------------------------
+MongoDB provides an implicit AND operation when specifying a
+comma separated list of expressions.
+Normal way: {$and: [{expression1},{expression1},...]}
+Shortcut way: {expression1, expression2,... }
+
+Q. Select all documents where the no_of_reviews is greater than or equals to 3 and downloadable is true?
+c1: {no_of_reviews: {$gte: 3}}
+c2: {downloadable: true}
+> db.books.find({$and: [{no_of_reviews: {$gte: 3}}, {downloadable:true}]}).pretty()
+shortcut way:
+> db.books.find({no_of_reviews: {$gte: 3}, downloadable: true}).pretty()
+
+
+Limitation of this shortcut:
+----------------------------
+If the conditions are on the same field then this short cut won't work.
+
+Q. List out all students whose marks are >=50 and <= 90?
+> db.students.find({marks: {$gte: 50}, marks: {$lte: 90}}).pretty()
+
+
+Reason: In Javascript object, duplicate keys are not allowed. If we are trying to add duplicate keys then old value will be replaced with new
+value.
+
+> db.students.find({ $and: [ {marks: {$gte: 50}},{marks: {$lte:90}}]}).pretty()
+{ "_id" : ObjectId("5fed4de50df1d8f23c0f678d"), "name" : "I", "marks" :90 }
+{ "_id" : ObjectId("5fed4de50df1d8f23c0f6791"), "name" : "E", "marks" :50 }
+{ "_id" : ObjectId("5fed4de50df1d8f23c0f6792"), "name" : "G", "marks" :70 }
+{ "_id" : ObjectId("5fed4de50df1d8f23c0f6794"), "name" : "F", "marks" :60 }
+{ "_id" : ObjectId("5fed4de50df1d8f23c0f6795"), "name" : "H", "marks" :80 }
+-------------------------
+Q. What is the difference between these two quires?
+1. db.students.find({ $and: [ {marks: {$gte: 50}},{marks: {$lte:90}}]}).pretty()
+2. db.students.find({marks: {$gte: 50, $lte: 90}}).pretty()
+
+Both will provide same results.
+In this we are using field only once and shortcut also will work. $not operator:
+--------------
+It is just to perform inverse operation.
+Syntax: { field: {$not: {operator expression}}}
+eg: { marks: {$not: {$gte: 10}}}
+
+$not operation performs logical NOT operation on the specified
+operator expression and selects the documents that do not match
+operator expression. This includes the documents that do not contain
+the field.
+eg:
+c1: { no_of_reviews: {$gt: 3}}
+db.books.find({ no_of_reviews: {$not: {$gt: 3}}}).pretty()
+It returns all documents where
+1. The no_of_reviews not greater than 3( i.e less than or equal to 3)
+2. no_of_reviews field does not exist.
+
+
+Element Query Operators:
+------------------------
+1. $exists 2. $type
+1. $exists:
+-----------
+Syntax: {field: {$exists: <boolean>}}
+--> If <boolean> is true, then it selects all documents that contain
+specified field even the value of the field is null.
+--> If <boolean> is false, then it selects all documents that do not contain
+specified field.
+
+db.students.insertOne({name: "a", marks: 100, gf: "Sunny"})
+db.students.insertOne({name: "b", marks: 20, gf: "Mallika"})
+
+Q1. Select all students who are having gf field?
+> db.students.find({ gf: {$exists: true}}).pretty()
+Q2. Select all students who are not having gf field?
+> db.students.find({ gf: {$exists: false}}).pretty()
+Q3. Select all students who are having the gf, but still marks are
+greater than 70?
+c1: {gf: {$exists: true}}
+c2: { marks: {$gt: 70}}
+> db.students.find({ gf: {$exists: true}, marks: {$gt: 70} }).pretty()
+> db.students.find({ $and: [{gf: {$exists: true}}, { marks: {$gt: 70}}]}).pretty()
+
+---------------------
+2. $type operator:
+------------------
+$type operator selects the documents where the value of the field is of
+a particular type.
+We have to specify the type as BSON type.
+75
+This operator is very helpful, whenever we are dealing with large
+volumes of unstructured data where types are unpredictable.
+Syntax-1: Querying for a single type
+------------------------------------
+{field: {$type: <BSONType>}}
+We can specifiy either number or alias for the BSON Type.
+eg:
+{field: {$type: "int"}}
+{field: {$type: "string"}}
+Syntax-2: Querying for multiple types
+--------------------------------------
+{field: {$type: [<BSONType1>, <BSONType2>, <BSONType3>,...]}}
+Table:
+BSON Type-------->Number------------>alias
+==========================================
+Double-------->1------------>"double"
+String-------->2------------>"string"
+Object-------->3------------>"object"
+Array-------- >4------------>"array"
+BinaryData---->5------------>"binData"
+ObjectId------>7------------>"objectId"
+Boolean------->8------------>"bool"
+Date---------->9------------>"date"
+Null--------->10------------>"null"
+Q1. What is the difference between int and long?
+-------------------------------------------------
+int --->32 bits integer value
+long --->64 bits integer value
+Q2. What is the difference between double and decimal?
+-------------------------------------------------
+double --->64 bits floating point value
+decimal --->128 bits floating point value
+Note:
+$type supports "number" alias, which will match the following BSON
+Types.
+int
+long
+double
+decimal
+Case Study:
+-----------
+db.phonebook.insertOne({_id: 1, name: "Sunny", phoneNumber:
+"9292929292"})
+db.phonebook.insertOne({_id: 2, name: "Bunny", phoneNumber:
+8896979797})
+db.phonebook.insertOne({_id: 3, name: "Chinny", phoneNumber:
+NumberLong(9898989898) })
+db.phonebook.insertOne({_id: 4, name: "Vinny", phoneNumber:
+NumberInt(9246212143)})
+db.phonebook.insertOne({_id: 5, name: "Pinny", phoneNumber:
+["8885252627", 8096969696]})
+77
+Every number is bydefault treated as double type in MongoDB.
+"9292929292" --->string type
+8896979797 ---->double type
+NumberLong(9898989898) --->long type
+NumberInt(9246212143) --->int type
+Q1. Select all documents where phoneNumber value is of string type?
+> db.phonebook.find({phoneNumber: {$type: "string"}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 2}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 2}}).pretty()
+{ "_id" : 1, "name" : "Sunny", "phoneNumber" : "9292929292" }
+{
+ "_id" : 5,
+ "name" : "Pinny",
+ "phoneNumber" : [
+ "8885252627",
+ 8096969696
+ ]
+}
+Q2. Select all documents where phoneNumber value is of double type?
+> db.phonebook.find({phoneNumber: {$type: "double"}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 1}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 1}}).pretty()
+{ "_id" : 2, "name" : "Bunny", "phoneNumber" : 8896979797 }
+{
+ "_id" : 5,
+78
+ "name" : "Pinny",
+ "phoneNumber" : [
+ "8885252627",
+ 8096969696
+ ]
+}
+Q3. Select all documents where phoneNumber value is of int type?
+> db.phonebook.find({phoneNumber: {$type: "int"}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 16}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 16}}).pretty()
+{ "_id" : 4, "name" : "Vinny", "phoneNumber" : 656277551 }
+Note: NumberInt(9246212143) -->656277551
+9246212143 cannot be accomodated in 32 bits. Hence some loss of
+information.
+Q4. Select all documents where phoneNumber value is of long type?
+> db.phonebook.find({phoneNumber: {$type: "long"}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 18}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: 18}}).pretty()
+{ "_id" : 3, "name" : "Chinny", "phoneNumber" :
+NumberLong("9898989898") }
+79
+Q5. Select all documents where phoneNumber value is of number
+type?
+> db.phonebook.find({phoneNumber: {$type: "number"}}).pretty()
+{ "_id" : 2, "name" : "Bunny", "phoneNumber" : 8896979797 }
+{ "_id" : 3, "name" : "Chinny", "phoneNumber" :
+NumberLong("9898989898") }
+{ "_id" : 4, "name" : "Vinny", "phoneNumber" : 656277551 }
+{
+ "_id" : 5,
+ "name" : "Pinny",
+ "phoneNumber" : [
+ "8885252627",
+ 8096969696
+ ]
+}
+Q6. Querying by multiple data types
+Select all documents where phoneNumber value is of either string or
+double.
+> db.phonebook.find({phoneNumber: {$type: ["string",
+"double"]}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: [2, 1]}}).pretty()
+> db.phonebook.find({phoneNumber: {$type: [2, 1]}}).pretty()
+{ "_id" : 1, "name" : "Sunny", "phoneNumber" : "9292929292" }
+{ "_id" : 2, "name" : "Bunny", "phoneNumber" : 8896979797 }
+{
+ "_id" : 5,
+ "name" : "Pinny",
+ "phoneNumber" : [
+ "8885252627",
+80
+ 8096969696
+ ]
+}
+comparison operators: $gt,$gte,$lt,$lte,$eq,$ne,$in,$nin
+logical operators: $or, $nor, $and, $not
+element query operators: $exists, $type
+Evaluation Query Operators:
+---------------------------
+The operators which can be used for evaluation purposes are called
+Evaluation Query Operators.
+1. $expr 2. $regex 3. $mod 4. $jsonSchema 5. $text 6. $where
+1. $expr operator:
+------------------
+expr means expression.
+Evaluate expression and select documents which satisfy that
+expression.
+Syntax:
+{ $expr: {<expression>}}
+It is very helpful to compare two field values within the same
+document.
+Case Study: Compare two field values from the same document:
+-----------------------------------------------------------
+db.homeBudget.insertOne({category:"home food", budget:1000,
+spent:1500})
+db.homeBudget.insertOne({category:"outside food", budget:1000,
+spent:2000})
+81
+db.homeBudget.insertOne({category:"rent", budget:1500, spent:1500})
+db.homeBudget.insertOne({category:"education", budget:2000,
+spent:1000})
+db.homeBudget.insertOne({category:"clothes", budget:750,
+spent:1500})
+db.homeBudget.insertOne({category:"entertinement", budget:1000,
+spent:2500})
+Q1. Select all documents where spent amount exceeds budget
+amount?
+> db.homeBudget.find({$expr: {$gt: ["$spent","$budget"]}}).pretty()
+{
+ "_id" : ObjectId("5ff52c2345f8edf724d263ec"),
+ "category" : "home food",
+ "budget" : 1000,
+ "spent" : 1500
+}
+{
+ "_id" : ObjectId("5ff52c2345f8edf724d263ed"),
+ "category" : "outside food",
+ "budget" : 1000,
+ "spent" : 2000
+}
+{
+ "_id" : ObjectId("5ff52c2345f8edf724d263f0"),
+ "category" : "clothes",
+ "budget" : 750,
+ "spent" : 1500
+}
+{
+ "_id" : ObjectId("5ff52c2645f8edf724d263f1"),
+ "category" : "entertinement",
+ "budget" : 1000,
+82
+ "spent" : 2500
+}
+Q2. Select all documents where spent amount is less than or equal to
+budget amount?
+> db.homeBudget.find({$expr: {$lte: ["$spent","$budget"]}}).pretty()
+{
+ "_id" : ObjectId("5ff52c2345f8edf724d263ee"),
+ "category" : "rent",
+ "budget" : 1500,
+ "spent" : 1500
+}
+{
+ "_id" : ObjectId("5ff52c2345f8edf724d263ef"),
+ "category" : "education",
+ "budget" : 2000,
+ "spent" : 1000
+}
+Q3. Select all documents where spent amount is equal to budget
+amount?
+> db.homeBudget.find({$expr: {$eq: ["$spent","$budget"]}}).pretty()
+{
+ "_id" : ObjectId("5ff52c2345f8edf724d263ee"),
+ "category" : "rent",
+ "budget" : 1500,
+ "spent" : 1500
+}
+
+
+1. updateOne():
+---------------
+db.collection.updateOne(filter,update,options)
+It finds the first document that matches filter criteria and perform
+required updation. It will perform updation for a single document.
+2. updateMany():
+---------------
+db.collection.updateMany(filter,update,options)
+To update all documents that match the specified filter criteria.
+3. update():
+-----------
+db.collection.update(filter,update,options)
+We can use this method to update either a single document or multiple
+documents.
+Bydefault this method updates a single document only.
+If we include multi:true to update all documents that match query
+criteria.
+db.collection.update(filter,update)--->To update a single document
+db.collection.update(filter,update,{multi:true})--->To update all
+matched documents

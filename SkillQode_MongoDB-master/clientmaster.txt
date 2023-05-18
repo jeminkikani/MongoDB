@@ -1,0 +1,10 @@
+db.clientmaster.insertMany([{clientno:'C00001',clientname:'ivan bayroos',city:'Mumbai',pincode:'400054',state:'Maharastra',baldue:'15000'},
+{clientno:'C00002',clientname:'Mamta Muzumdar',city:'Madras',pincode:'780001',state:'Tamil Nadu',baldue:'0'},
+{clientno:'C00003',clientname:'Chhaya Bankar',city:'Mumbai',pincode:'400057',state:'Maharastra',baldue:'5000'},
+{clientno:'C00004',clientname:'Ashwini Joshi',city:'Banglore',pincode:'560001',state:'Karnataka',baldue:'0'},
+{clientno:'C00005',clientname:'Hansel colaco',city:'Mumbai',pincode:'400060',state:'Maharastra',baldue:'2000'},
+{clientno:'C00006',clientname:'Deepak Sharma',city:'Manglore',pincode:'560050',state:'Karnataka',baldue:'0'}])
+
+ db.employees.find()
+ load("students.js")
+ db.clientmaster.insert({clientno:'C00007',clientname:'Rajesh Mishra',city:'Surat',pincode:'395010',state:'Gujarat',baldue:'0',hobbie:"reading"})
